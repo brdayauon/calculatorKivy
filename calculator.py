@@ -1,16 +1,8 @@
 import kivy
 from kivy.app import App
 from kivy.lang import Builder
-
-
-# for making multiple bttons to arranging 
-# them we are using this 
 from kivy.uix.gridlayout import GridLayout
-
-# for the size of window 
-from kivy.config import Config
-
-# Setting size to resizable 
+from kivy.config import Config  #to change window size
 Config.set('graphics', 'resizable', 1)
 
 #Builder.load functions so that I can use .kv 
@@ -18,19 +10,17 @@ Config.set('graphics', 'resizable', 1)
 Builder.load_string("""
 <MyWidget>:# Custom button
 <Button@Button>:
-    font_size: 32
+    font_size: 25
 
-# Define id so I can refer to the CalcGridLayout
-# class functions
-# Display points to the entry widget
-<CalcGridLayout>:
+# Define id so I can refer to the CalcBoard
+<CalcBoard>:
     id: calculator
     display: evaluationBox
     rows: 2
     padding: 5
     spacing: 3
  
-    # Where input is displayed
+    #Defining the text boxes
     BoxLayout:
         TextInput:
             id: entry
@@ -48,31 +38,31 @@ Builder.load_string("""
             font_size: 50 
             multiline: False 
 
-    # When buttons are pressed update the entry
+    # Define the buttons after the two text field boxes are filled 
     BoxLayout:
         spacing: 15
-        Button: 
+        Button:                             #clear button
             text: "CLEAR"
             on_press: entry.text = ""
             on_press: entry1.text = ""
             on_press: evaluationBox = ""
-        Button:
+        Button:                             # add button
             text: "+"
             on_press: calculator.add("+")
-        Button:
+        Button:                             # subtract button
             text: "-"
             on_press: calculator.subtract("-")
-        Button:
+        Button:                             # multiply button
             text: "*"
             on_press: calculator.multiply("*")
-        Button:
+        Button:                             # divide button
             text: "/"
             on_press: calculator.divide("/")
         
 """)
 
 # Creating Layout class 
-class CalcGridLayout(GridLayout):
+class CalcBoard(GridLayout):
 
     # add Function is invoked when + button is pressed 
     def add(self, text):
@@ -80,18 +70,21 @@ class CalcGridLayout(GridLayout):
          entryBox2 = int(self.ids.entry1.text)
          
          self.display.text = str(eval('entryBox1 + entryBox2'))
+
     # subtract Function is invoked when - button is pressed
     def subtract(self, text):
          entryBox1 = int(self.ids.entry.text)
          entryBox2 = int(self.ids.entry1.text)
         
          self.display.text = str(eval('entryBox1 - entryBox2'))
+
     # multiply Function is invoked when * button is pressed     
     def multiply(self, text):
          entryBox1 = int(self.ids.entry.text)
          entryBox2 = int(self.ids.entry1.text)
          
          self.display.text = str(eval('entryBox1 * entryBox2'))
+
     # divide Function is invoked when / button is pressed 
     def divide(self, text):
          entryBox1 = int(self.ids.entry.text)
@@ -104,7 +97,7 @@ class CalcGridLayout(GridLayout):
 # Defining the calculator App class
 class MyApp(App):
     def build(self):
-        return CalcGridLayout()
+        return CalcBoard()
 
 calcApp = MyApp()
 calcApp.run() 
