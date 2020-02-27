@@ -25,75 +25,86 @@ Builder.load_string("""
 # Display points to the entry widget
 <CalcGridLayout>:
     id: calculator
-    display: entry
-    rows: 6
-    padding: 10
-    spacing: 10
+    display: evaluationBox
+    rows: 2
+    padding: 5
+    spacing: 3
  
     # Where input is displayed
     BoxLayout:
         TextInput:
             id: entry
-            font_size: 40
+            font_size: 50
             multiline: False
+        
+        TextInput:
+            id: entry1 
+            font_size: 50
+            multiline: False
+        
+        TextInput:
+            text: "="
+            id: evaluationBox
+            font_size: 50 
+            multiline: False 
 
     # When buttons are pressed update the entry
     BoxLayout:
-        spacing: 10
+        spacing: 15
+        Button: 
+            text: "CLEAR"
+            on_press: entry.text = ""
+            on_press: entry1.text = ""
+            on_press: evaluationBox = ""
         Button:
             text: "+"
-            on_press: entry.text += self.text
+            on_press: calculator.add("+")
         Button:
             text: "-"
-            on_press: entry.text += self.text
+            on_press: calculator.subtract("-")
         Button:
             text: "*"
-            on_press: entry.text += self.text
+            on_press: calculator.multiply("*")
         Button:
             text: "/"
-            on_press: entry.text += self.text
-
-    # When equals is pressed pass text in the entry
-    # to the calculate function
-    BoxLayout:
-        spacing: 10
-        Button:
-            text: "Clear"
-            on_press: entry.text = ""
-       
-        Button:
-            text: "="
-            on_press: calculator.calculate(entry.text)
+            on_press: calculator.divide("/")
         
-    BoxLayout:
-        Button:
-            font_size: 15
-            text: "Scientific calculator"
-            on_press: entry.text = ""
-
 """)
 
 # Creating Layout class 
 class CalcGridLayout(GridLayout):
 
-    # Function called when equals is pressed 
-    def calculate(self, calculation):
-        if calculation:
-            try:
-                # Solve formula and display it in entry 
-                # which is pointed at by display 
-                self.display.text = str(eval(calculation))
-            except Exception:
-                self.display.text = "Error"
+    # add Function is invoked when + button is pressed 
+    def add(self, text):
+         entryBox1 = int(self.ids.entry.text)
+         entryBox2 = int(self.ids.entry1.text)
+         
+         self.display.text = str(eval('entryBox1 + entryBox2'))
+    # subtract Function is invoked when - button is pressed
+    def subtract(self, text):
+         entryBox1 = int(self.ids.entry.text)
+         entryBox2 = int(self.ids.entry1.text)
+        
+         self.display.text = str(eval('entryBox1 - entryBox2'))
+    # multiply Function is invoked when * button is pressed     
+    def multiply(self, text):
+         entryBox1 = int(self.ids.entry.text)
+         entryBox2 = int(self.ids.entry1.text)
+         
+         self.display.text = str(eval('entryBox1 * entryBox2'))
+    # divide Function is invoked when / button is pressed 
+    def divide(self, text):
+         entryBox1 = int(self.ids.entry.text)
+         entryBox2 = int(self.ids.entry1.text)
+         
+         self.display.text = str(eval('entryBox1 / entryBox2'))
 
 
-# Creating App class
+
+# Defining the calculator App class
 class MyApp(App):
     def build(self):
         return CalcGridLayout()
-
-    # creating object and running it
-
 
 calcApp = MyApp()
 calcApp.run() 
